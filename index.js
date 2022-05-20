@@ -64,6 +64,14 @@ async function run() {
         res.send(result);
       });
     });
+
+    //page count
+    app.get("/productCount", async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const count = await productCollection.estimatedDocumentCount();
+      res.send({ count });
+    });
   } finally {
   }
 }
