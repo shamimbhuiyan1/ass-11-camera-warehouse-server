@@ -65,6 +65,7 @@ async function run() {
       });
     });
 
+    //page count
     app.get("/product", async (req, res) => {
       console.log("query", req.query);
       const page = parseInt(req.query.page);
@@ -83,7 +84,7 @@ async function run() {
 
       res.send(products);
     });
-    //page count
+
     app.get("/productCount", async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
