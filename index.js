@@ -65,6 +65,26 @@ async function run() {
       });
     });
 
+    app.get("/product", async (req, res) => {
+      console.log("query", req.query);
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
+      const query = {};
+      const cursor = productCollection.find(query);
+      let products;
+      if (page || size) {
+        products = await cursor
+          .skip(page * size)
+          .limit(size)
+          .toArray();
+      } else {
+        //note:niche amra jdi home ekti nidisto number product show krate cai tahole .limit(10) dibo
+        //products = await cursor.limit(10).toArray();
+        products = await cursor.toArray();
+      }
+
+      res.send(products);
+    });
     //page count
     app.get("/productCount", async (req, res) => {
       const query = {};
