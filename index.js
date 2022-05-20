@@ -4,7 +4,7 @@ const ObjectId = require("mongodb").ObjectId;
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
-
+require("dotenv").config();
 //using middleware
 app.use(cors());
 app.use(express.json());
@@ -36,7 +36,7 @@ async function run() {
         res.send(result);
       });
 
-      // update user
+      // update product
       app.put("/product/:id", async (req, res) => {
         const id = req.params.id;
         const updatedProduct = req.body;
@@ -56,7 +56,7 @@ async function run() {
         res.send(result);
       });
 
-      //delete a user from server side
+      //delete a product from server side
       app.delete("/product/:id", async (req, res) => {
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
