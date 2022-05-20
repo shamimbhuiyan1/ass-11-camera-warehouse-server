@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 //mongodb
-const uri = `mongodb+srv://product:NumxIVcbkwG9GD0z@cluster0.oer4d.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.oer4d.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -29,7 +29,7 @@ async function run() {
       const product = await cursor.toArray();
       res.send(product);
 
-      app.post("/inventory", async (req, res) => {
+      app.post("/product", async (req, res) => {
         const newProduct = req.body;
         console.log("Adding new user", newProduct);
         const result = await productCollection.insertOne(newProduct);
@@ -37,7 +37,7 @@ async function run() {
       });
 
       // update user
-      app.put("/inventory/:id", async (req, res) => {
+      app.put("/product/:id", async (req, res) => {
         const id = req.params.id;
         const updatedProduct = req.body;
         const filter = { _id: ObjectId(id) };
@@ -57,7 +57,7 @@ async function run() {
       });
 
       //delete a user from server side
-      app.delete("/inventory/:id", async (req, res) => {
+      app.delete("/product/:id", async (req, res) => {
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
         const result = await productCollection.deleteOne(query);
@@ -78,8 +78,6 @@ async function run() {
           .limit(size)
           .toArray();
       } else {
-        //note:niche amra jdi home ekti nidisto number product show krate cai tahole .limit(10) dibo
-        //products = await cursor.limit(10).toArray();
         products = await cursor.toArray();
       }
 
@@ -95,9 +93,7 @@ async function run() {
   } finally {
   }
 }
-setTimeout(() => {
-  client.close();
-}, 1500);
+
 run().catch(console.dir);
 app.get("/", (req, res) => {
   res.send("This is Online Camera Warehouse.");
